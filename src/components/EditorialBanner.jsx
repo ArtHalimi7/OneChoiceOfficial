@@ -1,6 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import bannerImg from '../assets/banner.png';
 
 const EditorialBanner = () => {
@@ -38,14 +39,17 @@ const EditorialBanner = () => {
                     {/* Dark gradient overlay so text is readable */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
 
-                    {/* Accent border tracing the exact same clip path perfectly */}
-                    {/* By rendering a border inside a slightly smaller container, we map the same clip path logic */}
-                    <div className="absolute inset-x-4 inset-y-4 md:inset-x-6 md:inset-y-6 flex items-center justify-center pointer-events-none z-20">
-                        <div
-                            className="w-full h-full border-2 border-white/0 transition-colors duration-500 group-hover:border-[#FF5F00]/50"
-                            style={{ clipPath: complexClipPath }}
+                    {/* SVG Border tracing the complex tech-cut perfectly */}
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path
+                            d="M 5 1 L 99 1 L 99 95 L 95 99 L 1 99 L 1 5 Z"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            vectorEffect="non-scaling-stroke"
+                            className="opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                         />
-                    </div>
+                    </svg>
 
                     {/* Content Container (Bottom Left) */}
                     <div className="absolute inset-0 p-8 md:p-16 lg:p-24 flex flex-col justify-end z-10 pointer-events-none">
@@ -68,16 +72,18 @@ const EditorialBanner = () => {
                                 Ridefinimi i kryqëzimit të minimalizmit arkitekturor dhe kulturës së lartë rrugore. I disponueshëm në sasi të limituara.
                             </p>
 
-                            <motion.button
-                                className="font-['Anton'] text-xl md:text-2xl tracking-widest uppercase bg-white text-black px-8 py-4 pointer-events-auto hover:bg-[#FF5F00] hover:text-white transition-colors duration-300 flex items-center gap-4 group/btn"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                Bli Koleksionin
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform group-hover/btn:translate-x-2">
-                                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </motion.button>
+                            <Link to="/collection" className="pointer-events-auto">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="bg-white text-black hover:bg-[#FF5F00] hover:text-white px-8 py-4 text-xl md:text-2xl font-['Anton'] uppercase tracking-widest transition-colors duration-300 flex items-center gap-4 group/btn"
+                                >
+                                    Bli Koleksionin
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-transform duration-300 group-hover/btn:translate-x-1">
+                                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </motion.button>
+                            </Link>
                         </motion.div>
 
                     </div>

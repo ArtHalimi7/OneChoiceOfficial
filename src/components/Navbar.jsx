@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingCart, User, Search, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { cartCount } = useCart();
 
   // Handle scroll effect
   useEffect(() => {
@@ -34,11 +36,13 @@ const Navbar = () => {
   const linkHoverColor = isScrolled ? 'hover:text-[#FF5F00]' : 'hover:text-[#FF5F00]';
 
   const navLinks = [
-    { name: 'TË REJAT', path: '/new-arrivals' },
-    { name: 'ATLETE', path: '/sneakers' },
-    { name: 'VESHJE', path: '/streetwear' },
-    { name: 'AKSESORË', path: '/accessories' },
-    { name: 'ZBRITJE', path: '/sale' },
+    { name: 'TË REJAT', path: '/collection?tag=new' },
+    { name: 'ATLETE', path: '/collection?category=Atlete' },
+    { name: 'VESHJE', path: '/collection?category=Veshje' },
+    { name: 'AKSESORË', path: '/collection?category=Aksesorë' },
+    { name: 'BURRA', path: '/collection?gender=Burra' },
+    { name: 'GRA', path: '/collection?gender=Gra' },
+    { name: 'ZBRITJE', path: '/collection?tag=sale' },
   ];
 
   return (
@@ -54,7 +58,7 @@ const Navbar = () => {
           {/* Logo (Left) */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-1 z-50 group">
             <span className={`font-['Anton'] text-2xl tracking-wider uppercase transition-colors duration-300 ${logoColor} group-hover:text-[#FF5F00]`}>
-              ONE CHOICE
+              ONE CHOICE <span className='text-red-500 text-2xl'>.</span>
             </span>
           </Link>
 
@@ -79,23 +83,26 @@ const Navbar = () => {
             <Link to="/profile" aria-label="Profili" className={`transition-colors duration-300 ${iconColor}`}>
               <User size={22} strokeWidth={1.5} />
             </Link>
-            <button aria-label="Shporta" className={`relative transition-colors duration-300 ${iconColor}`}>
+            <Link to="/cart" aria-label="Shporta" className={`relative transition-colors duration-300 ${iconColor}`}>
               <ShoppingCart size={22} strokeWidth={1.5} />
-              {/* Optional Cart Badge */}
-              <span className={`absolute -top-1.5 -right-2 ${isScrolled ? 'bg-[#FF5F00] text-white' : 'bg-black text-white'} text-[0.6rem] font-bold w-4 h-4 rounded-full flex items-center justify-center`}>
-                3
-              </span>
-            </button>
+              {cartCount > 0 && (
+                <span className={`absolute -top-1.5 -right-2 ${isScrolled ? 'bg-[#FF5F00] text-white' : 'bg-black text-white'} text-[0.6rem] font-bold w-4 h-4 rounded-full flex items-center justify-center`}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </div>
 
           {/* Mobile Menu & Cart Toggles */}
           <div className="flex items-center gap-4 lg:hidden z-50">
-            <button aria-label="Shporta (Celular)" className={`relative transition-colors duration-300 ${iconColor}`}>
+            <Link to="/cart" aria-label="Shporta (Celular)" className={`relative transition-colors duration-300 ${iconColor}`}>
               <ShoppingCart size={24} strokeWidth={1.5} />
-              <span className={`absolute -top-1.5 -right-2 ${isScrolled ? 'bg-[#FF5F00] text-white' : 'bg-black text-white'} text-[0.6rem] font-bold w-4 h-4 rounded-full flex items-center justify-center`}>
-                3
-              </span>
-            </button>
+              {cartCount > 0 && (
+                <span className={`absolute -top-1.5 -right-2 ${isScrolled ? 'bg-[#FF5F00] text-white' : 'bg-black text-white'} text-[0.6rem] font-bold w-4 h-4 rounded-full flex items-center justify-center`}>
+                  {cartCount}
+                </span>
+              )}
+            </Link>
             <button
               className={`transition-colors duration-300 ${iconColor}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

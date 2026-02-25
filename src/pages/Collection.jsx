@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 
 // Comprehensive mock data
 const ALL_PRODUCTS = [
-    { id: 1, title: "Jordan 1 Retro High", price: 240, brand: "Jordan", category: "Atlete", gender: "Burra", isNew: true, imageSrc: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&q=80&w=800" },
-    { id: 2, title: "Yeezy Boost 700", price: 300, brand: "Yeezy", category: "Atlete", gender: "Të Dyja", isNew: false, imageSrc: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800" },
-    { id: 3, title: "Air Max 95 OG", price: 185, brand: "Nike", category: "Atlete", gender: "Burra", isNew: false, imageSrc: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=800" },
-    { id: 4, title: "Dunk Low Panda", price: 160, brand: "Nike", category: "Atlete", gender: "Gra", isNew: true, imageSrc: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=800" },
-    { id: 5, title: "Fear of God Hoodie", price: 120, brand: "Fear of God", category: "Veshje", gender: "Burra", isNew: true, imageSrc: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800" },
-    { id: 6, title: "Supreme Box Logo", price: 250, brand: "Supreme", category: "Veshje", gender: "Të Dyja", isNew: false, imageSrc: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&q=80&w=800" },
-    { id: 7, title: "Alyx Hero Chain", price: 220, brand: "Alyx", category: "Aksesorë", gender: "Të Dyja", isNew: false, imageSrc: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=800" },
-    { id: 8, title: "Off-White ODSY", price: 850, brand: "Off-White", category: "Atlete", gender: "Gra", isNew: true, imageSrc: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&q=80&w=800" },
+    { id: 1, title: "Jordan 1 Retro High", price: 240, brand: "Jordan", category: "Atlete", gender: "Burra", isNew: true, isOnSale: false, imageSrc: "https://static.ftshp.digital/img/tl/ddc3d690-e297-4984-9638-a9685db1dc9e-1369768.jpg" },
+    { id: 2, title: "Yeezy Boost 700", price: 300, brand: "Yeezy", category: "Atlete", gender: "Të Dyja", isNew: false, isOnSale: true, imageSrc: "https://thedropdate.com/_next/image?url=https%3A%2F%2Fstatic.sneakerjagers.com%2Fp%2Fxssu9XAuewVtzkhx821s9uksBN2vnO8BzKlOlIVL.png&w=3840&q=100" },
+    { id: 3, title: "Air Max 95 OG", price: 185, brand: "Nike", category: "Atlete", gender: "Burra", isNew: false, isOnSale: true, imageSrc: "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d6a9287b-8943-4a92-b9d0-5f0f2d525477/NIKE+AIR+MAX+95+BIG+BUBBLE.png" },
+    { id: 4, title: "Dunk Low Panda", price: 160, brand: "Nike", category: "Atlete", gender: "Gra", isNew: true, isOnSale: false, imageSrc: "https://imagedelivery.net/2DfovxNet9Syc-4xYpcsGg/b462a49c-f423-49bf-c6d6-7c48778ab000/products" },
+    { id: 5, title: "Fear of God Hoodie", price: 120, brand: "Fear of God", category: "Veshje", gender: "Burra", isNew: true, isOnSale: false, imageSrc: "https://cdn-images.farfetch-contents.com/27/49/09/39/27490939_57288124_1000.jpg" },
+    { id: 6, title: "Supreme Box Logo", price: 250, brand: "Supreme", category: "Veshje", gender: "Të Dyja", isNew: false, isOnSale: true, imageSrc: "https://limitedresell.com/14538-marketplace_1500/-supreme-box-logo-tee-fw23.jpg" },
+    { id: 7, title: "Alyx Hero Chain", price: 220, brand: "Alyx", category: "Aksesorë", gender: "Të Dyja", isNew: false, isOnSale: false, imageSrc: "https://images.stockx.com/images/Alyx-Hero-Chain-002-Necklace-Silver.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1645640284" },
+    { id: 8, title: "Off-White ODSY", price: 850, brand: "Off-White", category: "Atlete", gender: "Gra", isNew: true, isOnSale: true, imageSrc: "https://media2.symbol.fashion/aio-images/12/f5/12f5956b8d3ecaab9c6f1d6dfe111e4f/a1f19404-e9d4-411f-886c-973c3485506b.jpg" },
 ];
 
 const CustomDropdown = ({ options, value, onChange }) => {
@@ -53,11 +54,30 @@ const CustomDropdown = ({ options, value, onChange }) => {
 };
 
 const Collection = () => {
-    // Filter States
-    const [selectedCategory, setSelectedCategory] = useState("Të Gjitha");
+    const [searchParams] = useSearchParams();
+
+    // Derive initial filter values from URL params
+    // Using searchParams.toString() as key forces re-init when URL changes
+    const paramKey = searchParams.toString();
+    const urlCategory = searchParams.get('category') || "Të Gjitha";
+    const urlGender = searchParams.get('gender') || "Të Gjitha";
+    const urlTag = searchParams.get('tag') || null;
+
+    // Filter States — initialized from URL, user can override via sidebar
+    const [selectedCategory, setSelectedCategory] = useState(urlCategory);
     const [selectedBrand, setSelectedBrand] = useState("Të Gjitha");
-    const [selectedGender, setSelectedGender] = useState("Të Gjitha");
+    const [selectedGender, setSelectedGender] = useState(urlGender);
+    const [activeTag, setActiveTag] = useState(urlTag);
     const [sortOption, setSortOption] = useState("Të Preferuara");
+
+    // Sync filters when URL params change (user clicks a new navbar link)
+    useEffect(() => {
+        setSelectedCategory(urlCategory);
+        setSelectedGender(urlGender);
+        setSelectedBrand("Të Gjitha");
+        setActiveTag(urlTag);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [paramKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Derived Filter Categories
     const categories = ["Të Gjitha", "Atlete", "Veshje", "Aksesorë"];
@@ -70,7 +90,8 @@ const Collection = () => {
         const matchCategory = selectedCategory === "Të Gjitha" || product.category === selectedCategory;
         const matchBrand = selectedBrand === "Të Gjitha" || product.brand === selectedBrand;
         const matchGender = selectedGender === "Të Gjitha" || product.gender === selectedGender || product.gender === "Të Dyja";
-        return matchCategory && matchBrand && matchGender;
+        const matchTag = !activeTag || (activeTag === 'sale' && product.isOnSale) || (activeTag === 'new' && product.isNew);
+        return matchCategory && matchBrand && matchGender && matchTag;
     });
 
     // Sort Logic
@@ -155,6 +176,12 @@ const Collection = () => {
 
                         {/* Active Filters Display */}
                         <div className="flex flex-wrap gap-2">
+                            {activeTag && (
+                                <span className="inline-flex items-center gap-2 bg-[#FF5F00] text-white px-3 py-1 font-mono text-[10px] tracking-widest uppercase">
+                                    {activeTag === 'sale' ? 'Zbritje' : 'Të Rejat'}
+                                    <button onClick={() => setActiveTag(null)} className="hover:text-black">✕</button>
+                                </span>
+                            )}
                             {selectedCategory !== "Të Gjitha" && (
                                 <span className="inline-flex items-center gap-2 bg-black text-white px-3 py-1 font-mono text-[10px] tracking-widest uppercase">
                                     {selectedCategory}
@@ -215,7 +242,7 @@ const Collection = () => {
                             <h3 className="font-['Anton'] text-3xl md:text-4xl uppercase text-black/20 mb-4">Asgjë nuk u Gjet</h3>
                             <p className="font-mono text-sm tracking-widest uppercase text-black/50">Provo të ndryshosh filtrat.</p>
                             <button
-                                onClick={() => { setSelectedCategory("Të Gjitha"); setSelectedBrand("Të Gjitha"); setSelectedGender("Të Gjitha"); }}
+                                onClick={() => { setSelectedCategory("Të Gjitha"); setSelectedBrand("Të Gjitha"); setSelectedGender("Të Gjitha"); setActiveTag(null); }}
                                 className="mt-6 border border-black px-6 py-2 font-mono text-xs tracking-widest uppercase hover:bg-black hover:text-white transition-colors"
                             >
                                 Pastro të gjithë filtrat

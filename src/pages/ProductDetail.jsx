@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Heart, ChevronLeft, ChevronRight, X, Truck, RotateCcw, ShieldCheck } from 'lucide-react';
+import { ShoppingCart, Heart, ChevronLeft, ChevronRight, X, Truck, RotateCcw, ShieldCheck, Check } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+
+import { useCart } from '../context/CartContext';
 
 // Mock product data
 const PRODUCT = {
@@ -21,10 +23,10 @@ const PRODUCT = {
     ],
     sizes: [38, 39, 40, 41, 42, 43, 44, 45, 46],
     images: [
-        "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&q=80&w=1200",
-        "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1200",
-        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=1200",
-        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=1200"
+        "https://static.ftshp.digital/img/tl/ddc3d690-e297-4984-9638-a9685db1dc9e-1369768.jpg",
+        "https://imagedelivery.net/2DfovxNet9Syc-4xYpcsGg/b462a49c-f423-49bf-c6d6-7c48778ab000/products",
+        "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d6a9287b-8943-4a92-b9d0-5f0f2d525477/NIKE+AIR+MAX+95+BIG+BUBBLE.png",
+        "https://thedropdate.com/_next/image?url=https%3A%2F%2Fstatic.sneakerjagers.com%2Fp%2Fxssu9XAuewVtzkhx821s9uksBN2vnO8BzKlOlIVL.png&w=3840&q=100"
     ],
     isNew: true,
     category: "Atlete"
@@ -35,20 +37,20 @@ const RELATED_PRODUCTS = [
         id: 2,
         title: "Yeezy Boost 700",
         price: 300,
-        imageSrc: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800"
+        imageSrc: "https://thedropdate.com/_next/image?url=https%3A%2F%2Fstatic.sneakerjagers.com%2Fp%2Fxssu9XAuewVtzkhx821s9uksBN2vnO8BzKlOlIVL.png&w=3840&q=100"
     },
     {
         id: 3,
         title: "Air Max 95 OG",
         price: 185,
-        imageSrc: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=800"
+        imageSrc: "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d6a9287b-8943-4a92-b9d0-5f0f2d525477/NIKE+AIR+MAX+95+BIG+BUBBLE.png"
     },
     {
         id: 4,
         title: "Dunk Low Panda",
         price: 160,
         isNew: true,
-        imageSrc: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=800"
+        imageSrc: "https://imagedelivery.net/2DfovxNet9Syc-4xYpcsGg/b462a49c-f423-49bf-c6d6-7c48778ab000/products"
     }
 ];
 
@@ -60,13 +62,34 @@ const ProductDetail = () => {
     const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
     const [showFullscreen, setShowFullscreen] = useState(false);
     const [isWishlisted, setIsWishlisted] = useState(false);
+    const [addedToCart, setAddedToCart] = useState(false);
     const imageRef = useRef(null);
+    const { addToCart } = useCart();
 
-    // Scroll to top when product ID changes
+    const handleAddToCart = () => {
+        if (!selectedSize) return;
+        addToCart({
+            id: PRODUCT.id,
+            title: PRODUCT.title,
+            brand: PRODUCT.brand,
+            size: selectedSize,
+            color: PRODUCT.details.find(d => d.startsWith('Ngjyra'))?.replace('Ngjyra: ', '') || '',
+            price: PRODUCT.price,
+            image: PRODUCT.images[0],
+            quantity: 1,
+        });
+        setAddedToCart(true);
+        setTimeout(() => setAddedToCart(false), 2000);
+    };
+
+    // Scroll to top and reset selections when product ID changes
     useEffect(() => {
         window.scrollTo(0, 0);
-        setSelectedSize(null);
-        setSelectedImage(0);
+        // Use startTransition to avoid synchronous setState in effect warning
+        React.startTransition(() => {
+            setSelectedSize(null);
+            setSelectedImage(0);
+        });
     }, [id]);
 
     // Handle mouse move for zoom lens effect
@@ -101,7 +124,7 @@ const ProductDetail = () => {
                         {/* Main Image with Zoom */}
                         <div
                             ref={imageRef}
-                            className="relative w-full aspect-square bg-[#f5f5f5] overflow-hidden cursor-zoom-in border border-black/5"
+                            className="relative w-full aspect-square bg-white overflow-hidden cursor-zoom-in"
                             style={{
                                 clipPath: 'polygon(5% 0, 100% 0, 100% 95%, 95% 100%, 0 100%, 0 5%)'
                             }}
@@ -110,6 +133,16 @@ const ProductDetail = () => {
                             onMouseMove={handleMouseMove}
                             onClick={() => setShowFullscreen(true)}
                         >
+                            {/* SVG Border */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                <path
+                                    d="M 5 1 L 99 1 L 99 95 L 95 99 L 1 99 L 1 5 Z"
+                                    fill="none"
+                                    stroke="black"
+                                    strokeWidth="1.5"
+                                    vectorEffect="non-scaling-stroke"
+                                />
+                            </svg>
                             <motion.img
                                 key={selectedImage}
                                 src={PRODUCT.images[selectedImage]}
@@ -236,16 +269,20 @@ const ProductDetail = () => {
                         {/* Action Buttons */}
                         <div className="flex gap-3 mb-8">
                             <motion.button
-                                whileHover={{ scale: 1.01 }}
+                                whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`flex-1 flex items-center justify-center gap-3 py-4 font-['Anton'] text-lg md:text-xl tracking-widest uppercase transition-colors duration-300 ${selectedSize
-                                    ? 'bg-black text-white hover:bg-[#FF5F00]'
-                                    : 'bg-black/20 text-black/40 cursor-not-allowed'
-                                    }`}
                                 disabled={!selectedSize}
+                                className={`flex-1 h-14 font-['Anton'] text-base tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-3 shadow-xl ${!selectedSize
+                                    ? 'bg-black/10 text-black/30 cursor-not-allowed'
+                                    : 'bg-black text-white hover:bg-[#FF5F00]'
+                                    }`}
+                                onClick={handleAddToCart}
                             >
-                                <ShoppingCart size={20} strokeWidth={1.5} />
-                                Shto në Shportë
+                                {addedToCart ? (
+                                    <><Check size={20} strokeWidth={2} /> Shtuar!</>
+                                ) : (
+                                    <><ShoppingCart size={20} strokeWidth={1.5} /> Shto në Shportë</>
+                                )}
                             </motion.button>
 
                             <motion.button

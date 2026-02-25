@@ -2,6 +2,7 @@ import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import womenImg from '../assets/WomenCard.png';
 import menImg from '../assets/MenCard.png';
 
@@ -29,12 +30,23 @@ const CategoryCard = ({ title, imageSrc, align = "left", decorScale = 1 }) => {
 
             {/* Image Container with Tech Cut Corner and Soft Border */}
             <div
-                className="relative w-full aspect-[4/5] bg-[#E8E8E8] overflow-hidden transition-transform duration-700 ease-[0.22,1,0.36,1] group-hover:-translate-y-2 border border-black/10"
+                className="relative w-full aspect-[4/5] bg-white overflow-hidden transition-transform duration-700 ease-[0.22,1,0.36,1] group-hover:-translate-y-2"
                 style={{
                     // Creates the top-left sliced corner tech aesthetic shown in the reference
                     clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 15%)'
                 }}
             >
+                {/* SVG Border that follows the clip-path exactly */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path
+                        d="M 15 1 L 99 1 L 99 99 L 1 99 L 1 15 Z"
+                        fill="none"
+                        stroke="black"
+                        strokeWidth="1.5"
+                        vectorEffect="non-scaling-stroke"
+                    />
+                </svg>
+
                 <motion.img
                     src={imageSrc}
                     alt={title}
@@ -44,7 +56,7 @@ const CategoryCard = ({ title, imageSrc, align = "left", decorScale = 1 }) => {
                 />
 
                 {/* Subtle Inner Accent Ring on Hover */}
-                <div className="absolute inset-x-4 inset-y-4 border border-black transition-colors duration-500 group-hover:border-black/15 pointer-events-none"
+                <div className="absolute inset-x-4 inset-y-4 border border-black/0 transition-colors duration-500 group-hover:border-black/15 pointer-events-none z-10"
                     style={{ clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0 100%, 0 15%)' }}
                 />
             </div>
@@ -58,7 +70,7 @@ const CategoryCard = ({ title, imageSrc, align = "left", decorScale = 1 }) => {
                 {/* Animated Underline Link */}
                 <div className="relative inline-flex items-center gap-2 mt-2 group/link">
                     <span className="font-medium text-sm tracking-wider uppercase">
-                        Bli {title}
+                        Bli per {title}
                     </span>
                     <ArrowRight size={18} className="transform transition-transform duration-300 group-hover/link:translate-x-1" strokeWidth={1.5} />
 
@@ -80,7 +92,7 @@ const CategoryCard = ({ title, imageSrc, align = "left", decorScale = 1 }) => {
 
 const Categories = () => {
     return (
-        <section className="py-24 md:py-32 px-6 md:px-12 bg-white w-full overflow-hidden relative">
+        <section className="pt-24 md:pt-32 pb-12 md:pb-16 px-6 md:px-12 bg-white w-full overflow-hidden relative">
             <div className="max-w-[1400px] mx-auto relative z-10">
 
                 {/* Background Decorative Sketch */}
@@ -136,9 +148,13 @@ const Categories = () => {
                 {/* 2-Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 relative z-10">
                     {/* Swapped: Women on Left, Men on Right */}
-                    <CategoryCard title="Gra" imageSrc={womenImg} align="left" decorScale={0.8} />
+                    <Link to="/collection">
+                        <CategoryCard title="Gra" imageSrc={womenImg} align="left" decorScale={0.8} />
+                    </Link>
                     <div className="md:mt-24"> {/* Stagger the second card down */}
-                        <CategoryCard title="Burra" imageSrc={menImg} align="left" decorScale={1.1} />
+                        <Link to="/collection">
+                            <CategoryCard title="Burra" imageSrc={menImg} align="left" decorScale={1.1} />
+                        </Link>
                     </div>
                 </div>
             </div>

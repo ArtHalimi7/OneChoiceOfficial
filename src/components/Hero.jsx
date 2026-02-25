@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion as Motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import heroBg from '../assets/herobg2.png';
+
 
 const lineVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -14,6 +16,20 @@ const lineVariants = {
     },
   }),
 };
+
+const ctaVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.8 + i * 0.12,
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
 
 const Hero = () => {
   return (
@@ -78,11 +94,11 @@ const Hero = () => {
 
       {/* ONE CHOICE OFFICIAL — Staircase Diagonal Text */}
       <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4">
-        <div className="flex flex-col items-start w-fit">
+        <div className="flex flex-col items-start w-fit gap-6 md:gap-0">
           {[
             { word: 'ONE', align: 'ml-0' },
-            { word: 'CHOICE', align: 'ml-[10vw] md:ml-[8vw]' },
-            { word: 'OFFICIAL', align: 'ml-[20vw] md:ml-[16vw]' },
+            { word: 'CHOICE', align: 'ml-[12vw] md:ml-[12vw]' },
+            { word: 'OFFICIAL', align: 'ml-[24vw] md:ml-[24vw]' },
           ].map(({ word, align }, i) => (
             <Motion.span
               key={word}
@@ -91,18 +107,47 @@ const Hero = () => {
               animate="visible"
               variants={lineVariants}
               className={`block font-['Anton'] text-[#FF5F00] uppercase select-none
-                         text-[2.5rem] leading-[0.95]
-                         sm:text-[3.5rem]
-                         md:text-[4.8rem]
-                         lg:text-[6rem]
+                         text-[4.5rem] leading-[0.9]
+                         sm:text-[5.5rem]
+                         md:text-[6rem] md:leading-[0.85]
+                         lg:text-[6.5rem]
                          xl:text-[7.5rem]
-                         2xl:text-[8.5rem]
-                         tracking-[0.04em] ${align}`}
+                         2xl:text-[8.2rem]
+                         tracking-[0.04em] ${align} transition-all duration-300`}
             >
               {word}
             </Motion.span>
           ))}
         </div>
+      </div>
+
+      {/* CTAs — Bottom Right for All Screens, Smaller on Mobile */}
+      <div className="absolute bottom-8 right-6 md:right-16 md:bottom-16 z-20 flex flex-col sm:flex-row items-end sm:items-center gap-3 md:gap-6">
+        {/* Primary CTA */}
+        <Motion.div custom={0} initial="hidden" animate="visible" variants={ctaVariants} className="w-auto">
+          <Link to="/collection">
+            <Motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-black text-white px-6 py-3 md:px-10 md:py-4 font-['Anton'] text-sm md:text-lg tracking-[0.15em] uppercase hover:bg-[#FF5F00] transition-colors duration-300 shadow-xl"
+            >
+              Blej Tani
+            </Motion.button>
+          </Link>
+        </Motion.div>
+
+        {/* Secondary CTA */}
+        <Motion.div custom={1} initial="hidden" animate="visible" variants={ctaVariants} className="w-auto">
+          <Link to="/collection?tag=new">
+            <Motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="border-2 border-black/15 bg-white/10 backdrop-blur-sm text-black px-6 py-3 md:px-10 md:py-4 font-['Anton'] text-sm md:text-lg tracking-[0.15em] uppercase hover:bg-black hover:text-white transition-all duration-300 shadow-lg"
+            >
+              Të Rejat
+            </Motion.button>
+          </Link>
+        </Motion.div>
       </div>
     </section>
   );
