@@ -40,8 +40,8 @@ const Navbar = () => {
     { name: 'ATLETE', path: '/collection?category=Atlete' },
     { name: 'VESHJE', path: '/collection?category=Veshje' },
     { name: 'AKSESORË', path: '/collection?category=Aksesorë' },
-    { name: 'BURRA', path: '/collection?gender=Burra' },
-    { name: 'GRA', path: '/collection?gender=Gra' },
+    { name: 'Meshkuj', path: '/collection?gender=Meshkuj' },
+    { name: 'Femra', path: '/collection?gender=Femra' },
     { name: 'ZBRITJE', path: '/collection?tag=sale' },
   ];
 

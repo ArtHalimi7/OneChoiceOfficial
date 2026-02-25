@@ -7,14 +7,14 @@ import ProductCard from '../components/ProductCard';
 
 // Comprehensive mock data
 const ALL_PRODUCTS = [
-    { id: 1, title: "Jordan 1 Retro High", price: 240, brand: "Jordan", category: "Atlete", gender: "Burra", isNew: true, isOnSale: false, imageSrc: "https://static.ftshp.digital/img/tl/ddc3d690-e297-4984-9638-a9685db1dc9e-1369768.jpg" },
+    { id: 1, title: "Jordan 1 Retro High", price: 240, brand: "Jordan", category: "Atlete", gender: "Meshkuj", isNew: true, isOnSale: false, imageSrc: "https://static.ftshp.digital/img/tl/ddc3d690-e297-4984-9638-a9685db1dc9e-1369768.jpg" },
     { id: 2, title: "Yeezy Boost 700", price: 300, brand: "Yeezy", category: "Atlete", gender: "Të Dyja", isNew: false, isOnSale: true, imageSrc: "https://thedropdate.com/_next/image?url=https%3A%2F%2Fstatic.sneakerjagers.com%2Fp%2Fxssu9XAuewVtzkhx821s9uksBN2vnO8BzKlOlIVL.png&w=3840&q=100" },
-    { id: 3, title: "Air Max 95 OG", price: 185, brand: "Nike", category: "Atlete", gender: "Burra", isNew: false, isOnSale: true, imageSrc: "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d6a9287b-8943-4a92-b9d0-5f0f2d525477/NIKE+AIR+MAX+95+BIG+BUBBLE.png" },
-    { id: 4, title: "Dunk Low Panda", price: 160, brand: "Nike", category: "Atlete", gender: "Gra", isNew: true, isOnSale: false, imageSrc: "https://imagedelivery.net/2DfovxNet9Syc-4xYpcsGg/b462a49c-f423-49bf-c6d6-7c48778ab000/products" },
-    { id: 5, title: "Fear of God Hoodie", price: 120, brand: "Fear of God", category: "Veshje", gender: "Burra", isNew: true, isOnSale: false, imageSrc: "https://cdn-images.farfetch-contents.com/27/49/09/39/27490939_57288124_1000.jpg" },
+    { id: 3, title: "Air Max 95 OG", price: 185, brand: "Nike", category: "Atlete", gender: "Meshkuj", isNew: false, isOnSale: true, imageSrc: "https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d6a9287b-8943-4a92-b9d0-5f0f2d525477/NIKE+AIR+MAX+95+BIG+BUBBLE.png" },
+    { id: 4, title: "Dunk Low Panda", price: 160, brand: "Nike", category: "Atlete", gender: "Femra", isNew: true, isOnSale: false, imageSrc: "https://imagedelivery.net/2DfovxNet9Syc-4xYpcsGg/b462a49c-f423-49bf-c6d6-7c48778ab000/products" },
+    { id: 5, title: "Fear of God Hoodie", price: 120, brand: "Fear of God", category: "Veshje", gender: "Meshkuj", isNew: true, isOnSale: false, imageSrc: "https://cdn-images.farfetch-contents.com/27/49/09/39/27490939_57288124_1000.jpg" },
     { id: 6, title: "Supreme Box Logo", price: 250, brand: "Supreme", category: "Veshje", gender: "Të Dyja", isNew: false, isOnSale: true, imageSrc: "https://limitedresell.com/14538-marketplace_1500/-supreme-box-logo-tee-fw23.jpg" },
     { id: 7, title: "Alyx Hero Chain", price: 220, brand: "Alyx", category: "Aksesorë", gender: "Të Dyja", isNew: false, isOnSale: false, imageSrc: "https://images.stockx.com/images/Alyx-Hero-Chain-002-Necklace-Silver.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color&updated_at=1645640284" },
-    { id: 8, title: "Off-White ODSY", price: 850, brand: "Off-White", category: "Atlete", gender: "Gra", isNew: true, isOnSale: true, imageSrc: "https://media2.symbol.fashion/aio-images/12/f5/12f5956b8d3ecaab9c6f1d6dfe111e4f/a1f19404-e9d4-411f-886c-973c3485506b.jpg" },
+    { id: 8, title: "Off-White ODSY", price: 850, brand: "Off-White", category: "Atlete", gender: "Femra", isNew: true, isOnSale: true, imageSrc: "https://media2.symbol.fashion/aio-images/12/f5/12f5956b8d3ecaab9c6f1d6dfe111e4f/a1f19404-e9d4-411f-886c-973c3485506b.jpg" },
 ];
 
 const CustomDropdown = ({ options, value, onChange }) => {
@@ -82,7 +82,7 @@ const Collection = () => {
     // Derived Filter Categories
     const categories = ["Të Gjitha", "Atlete", "Veshje", "Aksesorë"];
     const brands = ["Të Gjitha", ...Array.from(new Set(ALL_PRODUCTS.map(p => p.brand)))];
-    const genders = ["Të Gjitha", "Burra", "Gra", "Të Dyja"];
+    const genders = ["Të Gjitha", "Meshkuj", "Femra", "Të Dyja"];
     const sortOptionsList = ["Të Preferuara", "Më të Rejat", "Çmimi: Ulët - Lart", "Çmimi: Lart - Ulët"];
 
     // Filter Logic

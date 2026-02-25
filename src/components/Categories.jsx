@@ -101,6 +101,7 @@ const Categories = () => {
                     <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="0.5" />
                 </svg>
 
+
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-12">
                     <motion.h2
                         initial={{ opacity: 0, x: -20 }}
@@ -147,13 +148,20 @@ const Categories = () => {
 
                 {/* 2-Column Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 relative z-10">
+                    {/* GHOST TEXT behind cards */}
+                    <div className="hidden md:flex absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full justify-center items-center pointer-events-none z-0 select-none overflow-hidden">
+                        <span className="font-['Anton'] text-[14vw] leading-none tracking-tight text-black/10 whitespace-nowrap">
+                            ONE CHOICE OFFICIAL
+                        </span>
+                    </div>
+
                     {/* Swapped: Women on Left, Men on Right */}
-                    <Link to="/collection">
-                        <CategoryCard title="Gra" imageSrc={womenImg} align="left" decorScale={0.8} />
+                    <Link to="/collection?gender=Femra" className="relative z-10 w-full">
+                        <CategoryCard title="Femra" imageSrc={womenImg} align="left" decorScale={0.8} />
                     </Link>
-                    <div className="md:mt-24"> {/* Stagger the second card down */}
-                        <Link to="/collection">
-                            <CategoryCard title="Burra" imageSrc={menImg} align="left" decorScale={1.1} />
+                    <div className="md:mt-24 relative z-10 w-full"> {/* Stagger the second card down */}
+                        <Link to="/collection?gender=Meshkuj">
+                            <CategoryCard title="Meshkuj" imageSrc={menImg} align="left" decorScale={1.1} />
                         </Link>
                     </div>
                 </div>
