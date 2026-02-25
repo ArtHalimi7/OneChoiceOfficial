@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion as Motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion as Motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import heroBg from '../assets/herobg2.png';
 
@@ -32,14 +32,56 @@ const ctaVariants = {
 
 
 const Hero = () => {
+  // Parallax Setup
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 50, stiffness: 400 };
+  const mouseXSpring = useSpring(mouseX, springConfig);
+  const mouseYSpring = useSpring(mouseY, springConfig);
+
+  // Background moves opposite or same way
+  const bgX = useTransform(mouseXSpring, [-0.5, 0.5], ["-2%", "2%"]);
+  const bgY = useTransform(mouseYSpring, [-0.5, 0.5], ["-2%", "2%"]);
+  
+  // Setup slight 3D rotate
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["2deg", "-2deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-2deg", "2deg"]);
+
+  // Foreground text moves slightly in opposite direction
+  const textX = useTransform(mouseXSpring, [-0.5, 0.5], ["2%", "-2%"]);
+  const textY = useTransform(mouseYSpring, [-0.5, 0.5], ["2%", "-2%"]);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { innerWidth, innerHeight } = window;
+      const xObj = (e.clientX / innerWidth) - 0.5;
+      const yObj = (e.clientY / innerHeight) - 0.5;
+      mouseX.set(xObj);
+      mouseY.set(yObj);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
-    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-[#f5f5f0]">
+    <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-[#f5f5f0]" style={{ perspective: 1000 }}>
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <Motion.div 
+        className="absolute inset-0 z-0 origin-center"
+        style={{
+          x: bgX,
+          y: bgY,
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d"
+        }}
+      >
         <img
           src={heroBg}
           alt="Hero Background"
-          className="w-full h-full object-cover opacity-100 scale-105 object-[center_35%]"
+          className="w-full h-full object-cover opacity-100 scale-110 object-[center_35%]"
         />
 
         {/* Transparent Vintage / Grunge Accents */}
@@ -90,16 +132,28 @@ const Hero = () => {
           <div className="absolute top-10 left-10 w-16 h-1 bg-black/20 -rotate-2"></div>
           <div className="absolute top-12 left-8 w-1 h-16 bg-black/20 rotate-1"></div>
         </div>
-      </div>
+      </Motion.div>
 
-      {/* ONE CHOICE OFFICIAL — Staircase Diagonal Text */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4">
-        <div className="flex flex-col items-start w-fit gap-6 md:gap-0">
+      {/* ONE CHOICE OFFICIAL — Interlocking Staircase Text */}
+      <Motion.div 
+        className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none px-4 origin-center"
+        style={{ x: textX, y: textY }}
+      >
+        {/* 
+          Each word's left offset = (previous word's letter count - 2) characters worth.
+          ONE = 3 chars → CHOICE starts at char index 1 (3-2=1)
+          CHOICE = 6 chars → OFFICIAL starts at 1 + (6-2) = 5 char widths
+          Using ch units relative to the font for precise alignment.
+        */}
+        <div
+          className="flex flex-col items-start w-fit"
+          style={{ lineHeight: 0.88 }}
+        >
           {[
-            { word: 'ONE', align: 'ml-0' },
-            { word: 'CHOICE', align: 'ml-[12vw] md:ml-[12vw]' },
-            { word: 'OFFICIAL', align: 'ml-[24vw] md:ml-[24vw]' },
-          ].map(({ word, align }, i) => (
+            { word: 'ONE', marginClass: 'ml-[8vw] md:ml-0' },
+            { word: 'CHOICE', marginClass: 'ml-[calc(8vw+0.52em)] md:ml-[0.52em]' },
+            { word: 'OFFICIAL', marginClass: 'ml-[calc(8vw+1.5em)] md:ml-[2.08em]' },
+          ].map(({ word, marginClass }, i) => (
             <Motion.span
               key={word}
               custom={i}
@@ -107,19 +161,19 @@ const Hero = () => {
               animate="visible"
               variants={lineVariants}
               className={`block font-['Anton'] text-[#FF5F00] uppercase select-none
-                         text-[4.5rem] leading-[0.9]
+                         text-[4.5rem]
                          sm:text-[5.5rem]
-                         md:text-[6rem] md:leading-[0.85]
+                         md:text-[6rem]
                          lg:text-[6.5rem]
                          xl:text-[7.5rem]
                          2xl:text-[8.2rem]
-                         tracking-[0.04em] ${align} transition-all duration-300`}
+                         tracking-[0.04em] transition-all duration-300 ${marginClass}`}
             >
               {word}
             </Motion.span>
           ))}
         </div>
-      </div>
+      </Motion.div>
 
       {/* CTAs — Bottom Right for All Screens, Smaller on Mobile */}
       <div className="absolute bottom-8 right-6 md:right-16 md:bottom-16 z-20 flex flex-col sm:flex-row items-end sm:items-center gap-3 md:gap-6">
