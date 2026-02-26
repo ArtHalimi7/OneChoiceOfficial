@@ -7,11 +7,13 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import PreviewOverlay from './components/PreviewOverlay'
 
 function App() {
   return (
     <CartProvider>
       <Router>
+        <PreviewOverlay />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
